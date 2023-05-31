@@ -1,2 +1,2 @@
 # Process-Supervision
-"Improving Mathematical Reasoning with Process Supervision" by OPENAI 
+Implementation of "Improving Mathematical Reasoning with Process Supervision" by OPENAI 
