@@ -4,7 +4,7 @@ from trl import AutoModelForCausalLMWithValueHead
 
 
 class PRMModel:
-    def __init__(self, model_name, ref_model_name, reward_model_name, device):
+    def __init__(self, model_name: str = "lvwerra/gpt2-imdb-pos-v2", ref_model_name: str = "lvwerra/gpt2-imdb", reward_model_name: str = "lvwerra/distilbert-imdb", device):
         """
         Initialize the PRM model with specified models and tokenizer.
 
@@ -17,9 +17,11 @@ class PRMModel:
         self.model = AutoModelForCausalLMWithValueHead.from_pretrained(
             model_name
         ).to(device)
+
         self.ref_model = AutoModelForCausalLMWithValueHead.from_pretrained(
             ref_model_name
         ).to(device)
+        
         self.reward_pipe = pipeline(
             "sentiment-analysis", model=reward_model_name, device=device
         )

@@ -29,19 +29,19 @@ device = 0 if torch.cuda.is_available() else "cpu"
 
 # Model initialization
 prm_model = PRMModel(
-    model_name="lvwerra/gpt2-imdb-pos-v2",
-    ref_model_name="lvwerra/gpt2-imdb",
-    reward_model_name="lvwerra/distilbert-imdb",
-    device=device,
+   model_name="lvwerra/gpt2-imdb-pos-v2",
+   ref_model_name="lvwerra/gpt2-imdb",
+   reward_model_name="lvwerra/distilbert-imdb",
+   device=device,
 )
 
 # Generation arguments
 gen_kwargs = {
-    "min_length": -1,
-    "top_k": 0.0,
-    "top_p": 1.0,
-    "do_sample": True,
-    "pad_token_id": prm_model.tokenizer.eos_token_id,
+   "min_length": -1,
+   "top_k": 0.0,
+   "top_p": 1.0,
+   "do_sample": True,
+   "pad_token_id": prm_model.tokenizer.eos_token_id,
 }
 sent_kwargs = {"top_k": None, "function_to_apply": "none", "batch_size": 16}
 
