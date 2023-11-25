@@ -20,6 +20,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.6"
 ]
+packages = [
+    { include = "process_supervision" },
+    { include = "process_supervision/**/*.py" },
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.8.1"

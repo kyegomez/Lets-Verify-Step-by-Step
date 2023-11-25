@@ -2,9 +2,7 @@ import torch
 from zeta.structs import (
     AutoregressiveWrapper,
     Decoder,
-    Encoder,
     Transformer,
-    ViTransformerWrapper,
 )
 
 
@@ -49,11 +47,6 @@ class GPT4(torch.nn.Module):
 
     def __init__(
         self,
-        image_size=256,
-        patch_size=32,
-        encoder_dim=512,
-        encoder_depth=6,
-        encoder_heads=8,
         num_tokens=20000,
         max_seq_len=1024,
         decoder_dim=512,
@@ -69,16 +62,6 @@ class GPT4(torch.nn.Module):
         qk_norm=True,
     ):
         super(GPT4, self).__init__()
-
-        # vit architecture
-        self.encoder = ViTransformerWrapper(
-            image_size=image_size,
-            patch_size=patch_size,
-            attn_layers=Encoder(
-                dim=encoder_dim, depth=encoder_depth, heads=encoder_heads
-            ),
-        )
-
         # palm model architecture
         self.decoder = Transformer(
             num_tokens=num_tokens,
@@ -88,7 +71,6 @@ class GPT4(torch.nn.Module):
                 dim=decoder_dim,
                 depth=decoder_depth,
                 heads=decoder_heads,
-                cross_attend=cross_attend,
                 alibi_pos_bias=alibi_pos_bias,
                 alibi_num_heads=alibi_num_heads,
                 rotary_xpos=rotary_xpos,
@@ -101,21 +83,19 @@ class GPT4(torch.nn.Module):
         # autoregressive wrapper to enable generation of tokens
         self.decoder = AutoregressiveWrapper(self.decoder)
 
-    def forward(self, img: torch.Tensor, text: torch.Tensor):
+    def forward(self, text: torch.Tensor):
         """Forward pass of the model."""
         try:
-            encoded = self.encoder(img, return_embeddings=True)
-            return self.decoder(text, context=encoded)
+            return self.decoder(text)
         except Exception as error:
             print(f"Failed in forward method: {error}")
             raise
 
 
 # Usage with random inputs
-img = torch.randn(1, 3, 256, 256)
 text = torch.randint(0, 20000, (1, 1024))
 
 # Initiliaze the model
 model = GPT4()
-output = model(img, text)
+output = model(text)
 print(output)
