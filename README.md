@@ -2,6 +2,75 @@
 Implementation of "Improving Mathematical Reasoning with Process Supervision" by OPENAI 
 
 
+
+
+
+
+
+
+
+```
+We instead focus exclusively on how to train the most reliable reward model
+possible. We evaluate a reward model by its ability to perform best-of-N search
+over uniformly sampled solutions from the generator. For each test problem we
+select the solution ranked highest by the reward model, automatically grade it
+based on its final answer, and report the fraction that are correct. A reward
+model that is more reliable will select the correct solution more often.
+
+In addition to using this selection strategy, we also iteratively re-train our
+PRM using the latest data at several points in the data collection process. At
+each iteration, we generate N solutions per problem and surface only the top K
+most convincing wrong-answer solutions to data-labelers. We experiment with
+either applying this top-K filtering at a problem level (K solutions per problem)
+or globally across the dataset (K solutions in total, unequally distributed among
+problems). Since the data collection process is expensive, it was not feasible
+to conduct at-scale ablations of these decisions. However, we perform several
+surrogate ablations in Section 4, using our largest PRM as a labelling oracle for
+a smaller PRM. More details about data collection can be found in Appendix B.
+We train PRMs to predict the correctness of each step after the last token in
+each step. This prediction takes the form of a single token, and we maximize the
+5
+Figure 2: Two solutions to the same problem, graded by the PRM. The solution
+on the left is correct while the solution on the right is incorrect. A green
+background indicates a high PRM score, and a red background indicates a low
+score. The PRM correctly identifies the mistake in the incorrect solution.
+log-likelihood of these target tokens during training. The PRM can therefore
+be trained in a standard language model pipeline without any special accommodations. To determine the step-level predictions at test time, it suffices to
+perform a single PRM forward pass over the whole solution. We visualize largescale PRM scores for two different solutions in Figure 2. To compare multiple
+solutions, it is necessary to compute a single score for each solution. This is an
+important but straightforward detail: we define the PRM score for a solution to
+be the probability that every step is correct under the PRM. We implement this
+as the product of the correctness probabilities for each step. We describe other
+possible scoring strategies and additional PRM training details in Appendix F.
+When we provide process supervision, we deliberately choose to supervise
+only up to the first incorrect step. This makes the comparison between outcome and process supervision more straightforward. For correct solutions, both
+methods provide the same information, namely that every step is correct. For
+incorrect solutions, both methods reveal the existence of at least one mistake,
+and process supervision additionally reveals the precise location of that mistake.
+If we were to provide additional process supervision beyond the first mistake,
+then process supervision would have an even greater information advantage.
+This decision also keeps the labelling cost similar for humans: without relying
+on an easy-to-check final answer, determining the correctness of a solution is
+equivalent to identifying its first mistake. While most MATH problems do have
+easy-to-check final answers, we expect this to not remain true in more complex
+domains.
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Let's Verify Step by Step: Reinforcement Training Models and Algorithmic Pseudocode
 1. Introduction
 In this research analysis, we aim to extend the architectural analysis of reinforcement training models by comparing outcome and process supervision. We will also provide a step-by-step algorithmic pseudocode for a to-do list.
