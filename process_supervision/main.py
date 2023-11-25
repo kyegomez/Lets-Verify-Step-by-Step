@@ -55,7 +55,6 @@ class GPT4(torch.nn.Module):
         alibi_num_heads=4,
         attn_kv_heads=2,
         use_abs_pos_emb=False,
-        cross_attend=True,
         alibi_pos_bias=True,
         rotary_xpos=True,
         attn_flash=True,
@@ -90,12 +89,3 @@ class GPT4(torch.nn.Module):
         except Exception as error:
             print(f"Failed in forward method: {error}")
             raise
-
-
-# Usage with random inputs
-text = torch.randint(0, 20000, (1, 1024))
-
-# Initiliaze the model
-model = GPT4()
-output = model(text)
-print(output)

@@ -1,14 +1,10 @@
-from swarms.models import OpenAIChat
-from swarms.structs import Flow
+import torch 
+from process_supervision.main import GPT4
 
-# Initialize the language model
-llm = OpenAIChat(
-    temperature=0.5,
-)
+# Usage with random inputs
+text = torch.randint(0, 20000, (1, 1024))
 
-
-## Initialize the workflow
-flow = Flow(llm=llm, max_loops=1, dashboard=True)
-
-# Run the workflow on a task
-out = flow.run("Generate a 10,000 word blog on health and wellness.")
+# Initiliaze the model
+model = GPT4()
+output = model(text)
+print(output)
