@@ -1,4 +1,4 @@
-import torch 
+import torch
 from process_supervision.main import GPT4
 
 # Usage with random inputs
