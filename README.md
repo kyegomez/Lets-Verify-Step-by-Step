@@ -6,6 +6,8 @@ Implementation of "Improving Mathematical Reasoning with Process Supervision" by
 
 
 ## Usage:
+
+### GPT4 without tokenizer
 ```python
 import torch 
 from process_supervision.main import GPT4
@@ -20,7 +22,7 @@ print(output)
 ```
 
 
-## `PRM`
+### `PRM`
 ```python
 import torch
 from process_supervision.main import PRM
@@ -61,6 +63,11 @@ for query, response, score in zip(queries, responses, scores):
     print(f"Query: {query}\nResponse: {response}\nScore: {score}\n")
 
 ```
+
+
+### GPT4 + PRM
+```
+
 
 
 # Method

@@ -3,3 +3,6 @@ torch
 torchvision
 trl
 transformers
+black
+autopep8
+ruff

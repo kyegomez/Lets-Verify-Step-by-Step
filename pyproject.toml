@@ -32,6 +32,9 @@ zetascale = "*"
 rich = "*"
 trl = "*"
 transformers = "*"
+black = "*"
+autopep8 = "*"
+ruff = "*"
 
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.0.249"
