@@ -1,5 +1,5 @@
 import torch
-from process_supervision.main import PRM
+from process_supervision.prm import PRM
 
 device = 0 if torch.cuda.is_available() else "cpu"
 

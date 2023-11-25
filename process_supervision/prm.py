@@ -1,10 +1,10 @@
 import torch
 from transformers import AutoTokenizer, pipeline
 from trl import AutoModelForCausalLMWithValueHead
-
+from typing import List, Any
 
 class PRMModel:
-    def __init__(self, model_name: str = "lvwerra/gpt2-imdb-pos-v2", ref_model_name: str = "lvwerra/gpt2-imdb", reward_model_name: str = "lvwerra/distilbert-imdb", device):
+    def __init__(self, model_name: str = "lvwerra/gpt2-imdb-pos-v2", ref_model_name: str = "lvwerra/gpt2-imdb", reward_model_name: str = "lvwerra/distilbert-imdb", device: torch.device):
         """
         Initialize the PRM model with specified models and tokenizer.
 
@@ -21,14 +21,14 @@ class PRMModel:
         self.ref_model = AutoModelForCausalLMWithValueHead.from_pretrained(
             ref_model_name
         ).to(device)
-        
+
         self.reward_pipe = pipeline(
             "sentiment-analysis", model=reward_model_name, device=device
         )
         self.tokenizer = AutoTokenizer.from_pretrained(ref_model_name)
         self.tokenizer.pad_token = self.tokenizer.eos_token
 
-    def generate_responses(self, queries, gen_len, gen_kwargs):
+    def generate_responses(self, queries: List[str], gen_len: int, gen_kwargs: Dict[str, Any]) -> List[str]:
         """
         Generate responses for a batch of queries.
 
@@ -54,7 +54,7 @@ class PRMModel:
             responses.append(response)
         return responses
 
-    def score_responses(self, responses, sent_kwargs):
+    def score_responses(self, responses: List[str], sent_kwargs: Dict[str, Any]) -> List[float]:
         """
         Score a batch of responses using the reward pipeline.
 

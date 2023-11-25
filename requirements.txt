@@ -1,3 +1,5 @@
 zetascale
 torch
 torchvision
+trl
+transformers

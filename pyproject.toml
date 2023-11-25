@@ -30,6 +30,8 @@ packages = [
 python = "^3.8.1"
 zetascale = "*"
 rich = "*"
+trl = "*"
+transformers = "*"
 
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.0.249"
