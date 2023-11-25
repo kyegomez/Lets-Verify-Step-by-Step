@@ -66,8 +66,6 @@ for query, response, score in zip(queries, responses, scores):
 
 
 ### GPT4 + PRM
-```
-
 
 
 # Method
