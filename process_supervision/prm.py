@@ -1,10 +1,18 @@
+from typing import Any, Dict, List
+
 import torch
 from transformers import AutoTokenizer, pipeline
 from trl import AutoModelForCausalLMWithValueHead
-from typing import List, Any
 
-class PRMModel:
-    def __init__(self, model_name: str = "lvwerra/gpt2-imdb-pos-v2", ref_model_name: str = "lvwerra/gpt2-imdb", reward_model_name: str = "lvwerra/distilbert-imdb", device: torch.device):
+
+class PRM:
+    def __init__(
+        self,
+        model_name: str = "lvwerra/gpt2-imdb-pos-v2",
+        ref_model_name: str = "lvwerra/gpt2-imdb",
+        reward_model_name: str = "lvwerra/distilbert-imdb",
+        device=None,
+    ):
         """
         Initialize the PRM model with specified models and tokenizer.
 
@@ -14,6 +22,11 @@ class PRMModel:
             reward_model_name (str): Name of the reward model.
             device (int or str): Device to run the model on ('cpu' or 'cuda').
         """
+        self.model_name = model_name
+        self.ref_model_name = ref_model_name
+        self.reward_model_name = reward_model_name
+        self.device = device
+        
         self.model = AutoModelForCausalLMWithValueHead.from_pretrained(
             model_name
         ).to(device)
@@ -28,7 +41,9 @@ class PRMModel:
         self.tokenizer = AutoTokenizer.from_pretrained(ref_model_name)
         self.tokenizer.pad_token = self.tokenizer.eos_token
 
-    def generate_responses(self, queries: List[str], gen_len: int, gen_kwargs: Dict[str, Any]) -> List[str]:
+    def generate_responses(
+        self, queries: List[str], gen_len: int, gen_kwargs: Dict[str, Any]
+    ) -> List[str]:
         """
         Generate responses for a batch of queries.
 
@@ -43,7 +58,7 @@ class PRMModel:
         responses = []
         for query in queries:
             input_ids = self.tokenizer.encode(query, return_tensors="pt").to(
-                device
+                self.device
             )
             output_ids = self.model.generate(
                 input_ids, max_new_tokens=gen_len, **gen_kwargs
@@ -54,7 +69,9 @@ class PRMModel:
             responses.append(response)
         return responses
 
-    def score_responses(self, responses: List[str], sent_kwargs: Dict[str, Any]) -> List[float]:
+    def score_responses(
+        self, responses: List[str], sent_kwargs: Dict[str, Any]
+    ) -> List[float]:
         """
         Score a batch of responses using the reward pipeline.
 

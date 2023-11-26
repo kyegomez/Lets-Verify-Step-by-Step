@@ -1,10 +1,20 @@
 import torch
 from process_supervision.prm import PRM
+from swarms.models import OpenAIChat
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+api_key = os.getenv("OPENAI_API_KEY")
+
+# LLM initialization
+llm = OpenAIChat(api_key=api_key)
 
 device = 0 if torch.cuda.is_available() else "cpu"
 
 # Model initialization
-prm_model = PRMModel(
+prm_model = PRM(
     model_name="lvwerra/gpt2-imdb-pos-v2",
     ref_model_name="lvwerra/gpt2-imdb",
     reward_model_name="lvwerra/distilbert-imdb",

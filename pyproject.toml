@@ -35,6 +35,7 @@ transformers = "*"
 black = "*"
 autopep8 = "*"
 ruff = "*"
+swarms = "*"
 
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.0.249"
