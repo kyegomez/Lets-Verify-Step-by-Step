@@ -1,6 +1,7 @@
 import torch
 from process_supervision.prm import PRM
 from swarms.models import OpenAIChat
+from process_supervision.generator import MathDataGenerator
 import os
 from dotenv import load_dotenv
 
@@ -9,8 +10,12 @@ load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 
 # LLM initialization
-llm = OpenAIChat(api_key=api_key)
+llm = OpenAIChat(openai_api_key=api_key)
 
+# Math data generator initialization
+math_datagenerator = MathDataGenerator(llm, num_iters=10)
+
+# Device initialization
 device = 0 if torch.cuda.is_available() else "cpu"
 
 # Model initialization
@@ -33,6 +38,7 @@ sent_kwargs = {"top_k": None, "function_to_apply": "none", "batch_size": 16}
 
 # Sample queries
 queries = ["Sample query 1", "Sample query 2"]
+queries = [math_datagenerator.generate_samples(query) for query in queries]
 
 # Generate responses
 responses = prm_model.generate_responses(
