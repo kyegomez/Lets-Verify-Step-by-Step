@@ -1,11 +1,34 @@
 from typing import Any, Dict, List
 
-import torch
 from transformers import AutoTokenizer, pipeline
 from trl import AutoModelForCausalLMWithValueHead
 
 
 class PRM:
+    """
+    PRM model class.
+    
+    Args:
+        model_name (str): Name of the main model.
+        ref_model_name (str): Name of the reference model.
+        reward_model_name (str): Name of the reward model.
+        device (int or str): Device to run the model on ('cpu' or 'cuda').
+        
+    Examples:
+        >>> prm_model = PRM(
+        ...     model_name="lvwerra/gpt2-imdb-pos-v2",
+        ...     ref_model_name="lvwerra/gpt2-imdb",
+        ...     reward_model_name="lvwerra/distilbert-imdb",
+        ...     device=device,
+        ... )
+        >>> prm_model.generate_responses(
+        ...     queries, gen_len=10, gen_kwargs=gen_kwargs
+        ... )
+        ['Sample response 1', 'Sample response 2']
+        >>> prm_model.score_responses(responses, sent_kwargs)
+        [0.0, 0.0]
+    
+    """ 
     def __init__(
         self,
         model_name: str = "lvwerra/gpt2-imdb-pos-v2",
@@ -26,7 +49,7 @@ class PRM:
         self.ref_model_name = ref_model_name
         self.reward_model_name = reward_model_name
         self.device = device
-        
+
         self.model = AutoModelForCausalLMWithValueHead.from_pretrained(
             model_name
         ).to(device)
