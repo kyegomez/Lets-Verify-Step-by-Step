@@ -101,14 +101,12 @@ for query, response, score in zip(queries, responses, scores):
 ```
 
 # Todo
-- [ ] Creae the PRM reward model
-
-
+- [ ] We need help integrating the math sample generator, first create the class and prompts and pass them into gpt4
+- [ ] Then conduct best of N sampling with the reward model and reward each step
+- [ ] Train or finetune now model with dataset
+- [ ] Have a better idea? LMK
 
 
 # License
 MIT
-
-
-
 
