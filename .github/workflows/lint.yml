@@ -10,7 +10,7 @@ jobs:
     name: Lint
     steps:
       - name: Check out source repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
